@@ -1,10 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
 import { StoreContext }  from './Store'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import axios from 'axios'
+
 
 function App() {
+  const [clicked, setClicked] = useState(false)
+
   const store = useContext(StoreContext)
+
+  useEffect(() => {
+    console.log("running useEffect. node_env: " + process.env.NODE_ENV)
+    if (!store.state.wasDataReceived) {
+      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test_production') {
+        console.log('node env is: ' + process.env.NODE_ENV ?? null)
+        axios.get(`http://localhost:4000/data`)
+        .then(res => {
+          console.log("received api response: " + res.data)
+          store.dispatch({ type: 'setApiData', message: res.data})
+          store.dispatch({ type: 'setWasDataReceived', message: true})
+          
+          if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test_production') { console.log('logging data received:'); console.log(res.data)}
+          return true
+        })
+      }
+    }
+ }, [])
 
   return (
     <div className="App">
@@ -25,12 +47,11 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </a> 
         <Text/>
-        <p>storetest:</p>
-        <p>{store?.state?.text}</p>
-      
-        {/* <p> sample store text: </p>{store.state.sampleText} */}
+        <button onClick={() => setClicked(!clicked)}> toggle clicked: {String(clicked)} </button>
+        <p>store test:  {store?.state?.text}</p>
+        <p>store test - update after api req:  {store?.state?.apiData}</p>
       </header>
     </div>
   );

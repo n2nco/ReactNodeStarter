@@ -5,8 +5,9 @@ const defaultState = {
 
    sessionId: '',
    sortBy: false,
-   wasDataReceived: true,
+   wasDataReceived: false,
    text: 'sample text',
+   apiData: false,
    
    mediaShown: 'tweets',
    medias: ['tweets', 'youtube', 'substack'],
@@ -15,6 +16,8 @@ const defaultState = {
 
 //Usage in components: store.state.mediaShown
 const reducer = (state, action) => {
+    console.log('running action ' + action.type + ' with payload: ' + action.message)
+
    switch (action.type) {
       case 'setMediaShown':
          return {
@@ -26,6 +29,16 @@ const reducer = (state, action) => {
            ...state,
            sortBy: action.message,
         }
+        case 'setApiData':
+            return {
+              ...state,
+              apiData: action.message,
+           }
+           case 'setWasDataReceived':
+            return {
+              ...state,
+              wasDataReceived: action.message,
+           }
     }
 }
 
