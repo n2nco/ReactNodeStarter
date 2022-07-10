@@ -1,9 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
+import { StoreContext }  from './Store'
+import { useContext } from 'react'
 
 function App() {
+  const store = useContext(StoreContext)
+
   return (
     <div className="App">
+
+      {(store?.state?.wasDataReceived) ? (
+      <p> data received</p>
+       ) : ( <p>data not received </p> )}
+
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -18,10 +27,16 @@ function App() {
           Learn React
         </a>
         <Text/>
+        <p>storetest:</p>
+        <p>{store?.state?.text}</p>
+      
+        {/* <p> sample store text: </p>{store.state.sampleText} */}
       </header>
     </div>
   );
+
 }
+
 
 const Text = () => {
   return <p>insightful content</p>
