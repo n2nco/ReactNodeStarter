@@ -5,14 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import StoreProvider from './Store'
 
+import { MetaMaskProvider } from "metamask-react";
+
 
 
 ReactDOM.render(
   <React.StrictMode>
+    <MetaMaskProvider>
       <StoreProvider>
-       <App />
-
-    </StoreProvider>
+         <App />
+     </StoreProvider>
+    </MetaMaskProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

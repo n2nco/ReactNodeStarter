@@ -3,6 +3,19 @@ import React, { useEffect, useContext, createContext } from 'react'
 
 const defaultState = {
 
+
+   courseCode: "",
+   courseCodeDefault: "CPSC100",
+   term: "",
+
+   daysAndTimes: { 
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+    },
+
    sessionId: '',
    sortBy: false,
    wasDataReceived: false,
@@ -19,6 +32,15 @@ const reducer = (state, action) => {
     console.log('running action ' + action.type + ' with payload: ' + action.message)
 
    switch (action.type) {
+      case 'setDaysAndTimes':
+         console.log('setting days and times' + action.message) 
+         return { 
+            ...state, weekdaysSelected: action.message 
+         }
+   
+
+
+
       case 'setMediaShown':
          return {
            ...state,
