@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import ReactDOM from "react-dom";
 import { Formik, Form, Field, useFormik } from "formik";
 import * as yup from "yup";
@@ -8,6 +8,8 @@ import TextField from "@material-ui/core/TextField";
 import Stack from "@mui/material/Stack";
 
 import SelectionContainer from "./SelectionContainer";
+
+import { StoreContext } from "./Store";
 
 const validationSchema = yup.object({
   email: yup
@@ -28,10 +30,10 @@ const CourseInput = () => {
       <h3>Enter your course details:</h3>
       <Formik
         initialValues={{ name: "", email: "" }}
-        onSubmit={async (values) => {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          alert(JSON.stringify(values, null, 2));
-        }}
+        // onSubmit={async (values) => {
+        //   await new Promise((resolve) => setTimeout(resolve, 500));
+        //   alert(JSON.stringify(values, null, 2));
+        // }}
       >
         <Form>
           <label htmlFor="firstName" style={{ padding: "4px" }}>
@@ -39,10 +41,10 @@ const CourseInput = () => {
           </label>
           <Field name="name" type="text" placeholder="e.g UBC" />
           <p></p>
-          <label htmlFor="firstName" style={{ padding: "4px" }}>
+          <label htmlFor="courseCode" style={{ padding: "4px" }}>
             Course Code:
           </label>
-          <Field name="name" type="text" placeholder="eg. CPSC100" />
+          <Field name="courseCode" type="text" placeholder="eg. CPSC100" />
           <Field as="select" name="color">
             <option value="red">Fall Semester (1)</option>
             <option value="green">Winter Semester (2)</option>
@@ -51,7 +53,7 @@ const CourseInput = () => {
             <option value="blue">Summer Session 2</option>
           </Field>
 
-          <button type="submit">Submit</button>
+          {/* <button type="submit">Submit</button> */}
           <SelectionContainer></SelectionContainer>
         </Form>
       </Formik>
@@ -60,6 +62,7 @@ const CourseInput = () => {
 };
 
 const InputForm = () => {
+  let store = useContext(StoreContext)
   const formik = useFormik({
     initialValues: {
       email: "michael.green@ubc.ca",
@@ -67,7 +70,7 @@ const InputForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      alert(JSON.stringify(store?.state, null, 2));
     }
   });
 

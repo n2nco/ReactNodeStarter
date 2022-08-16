@@ -24,7 +24,7 @@ return (
         justifyContent="center"
         // minHeight="100vh"
         minWidth="100vw"
-        spacing={2}
+        spacing={-1}
         // margin="-200px 0px 0px 0px"
         
         >
@@ -64,13 +64,14 @@ return (
     const setStoreTime = (time) => {
         console.log('time selected:') 
         console.log(time)
-        store.dispatch({type: 'setDaysAndTimes', message: store.state.daysAndTimes[text] = time})
+
+        store?.dispatch({type: 'setDaysAndTimes', message: store.state.daysAndTimes[text] = time}) 
         return time
     }
   
     return (
         <>
-        <Box  direction="column" alignItems="center" justifyContent="center" marginBottom={2}>
+        <Box  direction="column" alignItems="center" justifyContent="center" marginBottom={0}>
         <Button
             onClick={handleClick}
             variant="contained"
@@ -80,7 +81,10 @@ return (
             >
             {text}
         </Button>
-            {!flag ? <TimeRangePicker key={{key}} value={ (!store.state.daysAndTimes[text] || !store.state.daysAndTimes[text]?.length == 0 ) ? store.state.daysAndTimes[text] : defaultTime } onChange={ (newTime) => { if(!newTime) {console.log('clear clicked or time input falsy')}; setStoreTime(newTime); console.log('time onchange: ' + newTime); return newTime; }}  display="inline"  style={{minWidth: "500wv", display: "block", align: 'right', padding:'10px'}}/> : null}
+        
+       
+            {!flag ? <TimeRangePicker key={{key}} value={ (!store.state.daysAndTimes[text] || !store.state.daysAndTimes[text]?.length == 0 ) ? store.state.daysAndTimes[text] : defaultTime } onChange={ (newTime) => { if(!newTime) {console.log('clear clicked or time input falsy')}; setStoreTime(newTime); console.log('time onchange: ' + newTime); return newTime; }}  display="inline"  style={{minWidth: "500wv", display: "block", align: 'right', padding:'10px', color: 'black'}}/> : null}
+
         </Box>
       </>
     );

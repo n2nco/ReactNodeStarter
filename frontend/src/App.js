@@ -65,7 +65,7 @@ function App() {
        ) : ( <code>data not received </code> )}
 
         <button onClick={() => setClicked(!clicked)}> toggle clicked: {String(clicked)} </button>
-        <button onClick={() => { store.dispatch({type: 'setWasDataReceived', message: !store.state.wasDataReceived})}}> toggle store.state.wasDataReceived: {String(store.state.wasDataReceived)} </button>
+        <button onClick={() => { store.dispatch({type: 'setWasDataReceived', message: !store?.state.wasDataReceived})}}> toggle store.state.wasDataReceived: {String(store?.state.wasDataReceived)} </button>
         <p>store test:  {store?.state?.text}</p>
         <p>store test - update after api req:  {store?.state?.apiData}</p>
       </header>
