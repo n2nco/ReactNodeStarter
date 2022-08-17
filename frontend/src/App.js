@@ -16,7 +16,12 @@ import InputForm from './InputForm';
 import { sizeHeight } from '@mui/system';
 
 import Box from '@material-ui/core/Box';
-import { CheckoutFormWrapped } from './CheckoutForm';
+import CheckoutForm  from './CheckoutForm';
+import CheckoutForm2  from './CheckoutForm2';
+
+// import StripeApp from './StripeApp';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 
 function App() {
@@ -24,6 +29,41 @@ function App() {
   const store = useContext(StoreContext)
   //new
   const [value, onChange] = useState(['10:00', '11:00']);
+
+
+
+  //AUG 17th - bringing code in from from stripe-sample-code
+  const stripePromise = loadStripe("pk_test_51LTvVADpGantSZj85XqAIo1e8fTMan7oYX90iettjwre22Vsy8PuuSMd8nRveBKlxMFMuwoa2avEAsgPcEivHCP400Cr9bHAND");
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(async () => {
+    // Create PaymentIntent as soon as the page loads
+    let res = await axios.post('http://localhost:3010/create-payment-intent', JSON.stringify({ items: [{ id: "1 course" }]}))
+      // .then((res) => {console.log(res); console.log('res^');} )
+      // .then((data) => {
+      //   console.log('data, including clientSecret:')
+      //   setClientSecret(data.clientSecret)
+      // } )
+      console.log('/create-payment-intent response:')
+      console.log(res)
+      setClientSecret(res.data.clientSecret)
+      console.log('clientSecret:')
+      console.log(clientSecret)
+  }, []);
+
+  const appearance = {
+    theme: 'stripe',
+    variables: {
+      colorText: '#32325d',
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    },
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+
+
   //Uncomment for api call later - Aug 6th
 //   useEffect(() => {
 //     console.log("running useEffect. node_env: " + process.env.NODE_ENV)
@@ -46,7 +86,7 @@ function App() {
   return (
 
     <>  
-       
+   
     {/* <div className="App"> */}
     <header className="App-header" style={{paddingTop: '60px', paddingBottom:'300px'}}>
     <a
@@ -61,7 +101,11 @@ function App() {
         <Text/>
         <Box>
          <InputForm></InputForm>
-         <CheckoutFormWrapped ></CheckoutFormWrapped>
+         {clientSecret && (
+          <Elements options={options} stripe={stripePromise}>
+          <CheckoutForm ></CheckoutForm>
+          </Elements> ) }
+      
          {/* <SelectionContainer></SelectionContainer> */}
          </Box>
  

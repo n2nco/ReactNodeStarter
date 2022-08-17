@@ -11,7 +11,7 @@ import SelectionContainer from "./SelectionContainer";
 
 import { StoreContext } from "./Store";
 
-import { writeNewSubmission } from './api'
+import { writeNewOrder } from './api'
 
 const validationSchema = yup.object({
   email: yup
@@ -78,7 +78,7 @@ const InputForm = () => {
      // alert(JSON.stringify(store?.state, null, 2));
       console.log('JSON.stringify(store?.state, null, 2)');
       console.log(JSON.stringify(store?.state, null, 2));
-      await writeNewSubmission()
+      await writeNewOrder()
     }
   });
 

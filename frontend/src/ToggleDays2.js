@@ -41,9 +41,6 @@ const ColorToggleButton = () => {
         console.log('setting selection: ' + event.target.key)
         setSelections(event.target.key)
     }
-
-
-
   };
 
   const days = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];

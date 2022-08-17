@@ -1,3 +1,18 @@
+
+
+Clicker app note: 
+Started with ReactNodeStarter.git
+iClicker is on remote origin2
+Currently named ‘reactstarter2’
+Changed TimeRangePicker.css
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
