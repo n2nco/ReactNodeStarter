@@ -16,6 +16,8 @@ import InputForm from './InputForm';
 import { sizeHeight } from '@mui/system';
 
 import Box from '@material-ui/core/Box';
+import { CheckoutFormWrapped } from './CheckoutForm';
+
 
 function App() {
   const [clicked, setClicked] = useState(false)
@@ -25,10 +27,10 @@ function App() {
   //Uncomment for api call later - Aug 6th
 //   useEffect(() => {
 //     console.log("running useEffect. node_env: " + process.env.NODE_ENV)
-//     if (!store.state.wasDataReceived) {
+//     // if (!store.state.wasDataReceived) {
 //       if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test_production') {
 //         console.log('node env is: ' + process.env.NODE_ENV ?? null)
-//         axios.get(`http://localhost:4000/data`)
+//         axios.get(`http://localhost:3010/test`)
 //         .then(res => {
 //           console.log("received api response: " + res.data)
 //           store.dispatch({ type: 'setApiData', message: res.data})
@@ -38,28 +40,32 @@ function App() {
 //           return true
 //         })
 //       }
-//     }
+//     // }
 //  }, [])//runs only on 1st render w empty array, (then every time store.state.wasDataReceived changes?)
 
   return (
+
     <>  
+       
     {/* <div className="App"> */}
-    <header className="App-header">
+    <header className="App-header" style={{paddingTop: '60px', paddingBottom:'300px'}}>
     <a
           className="App-link"
           href="https://cdn.cdnparenting.com/articles/2021/10/08105732/2058809810.webp"
           target="_blank"
           rel="noopener noreferrer"
         >
-          AutoClicker
+          iClicked
         </a> 
         <img src={iclick} className="App-logo" alt="logo" />
         <Text/>
         <Box>
          <InputForm></InputForm>
+         <CheckoutFormWrapped ></CheckoutFormWrapped>
          {/* <SelectionContainer></SelectionContainer> */}
          </Box>
-    
+ 
+{/*     
       {(store?.state?.wasDataReceived) ? (
       <code> data received</code>
        ) : ( <code>data not received </code> )}
@@ -67,7 +73,7 @@ function App() {
         <button onClick={() => setClicked(!clicked)}> toggle clicked: {String(clicked)} </button>
         <button onClick={() => { store.dispatch({type: 'setWasDataReceived', message: !store?.state.wasDataReceived})}}> toggle store.state.wasDataReceived: {String(store?.state.wasDataReceived)} </button>
         <p>store test:  {store?.state?.text}</p>
-        <p>store test - update after api req:  {store?.state?.apiData}</p>
+        <p>store test - update after api req:  {store?.state?.apiData}</p> */}
       </header>
       <Web3Component></Web3Component>
       <SignMessage></SignMessage>
@@ -79,7 +85,7 @@ function App() {
 }
 
 const Text = () => {
-  return <code>automate your iClicker participation</code>
+  return <code style={{marginBottom:'-100px', color: '#070c13', fontWeight: 300, letterSpacing: '0.025em', fontSize: '14px'}}>automate your iClicker participation</code>
 }
 
 export default App;

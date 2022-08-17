@@ -25,6 +25,8 @@ const defaultState = {
    mediaShown: 'tweets',
    medias: ['tweets', 'youtube', 'substack'],
 
+   submitted: false,
+
 }
 
 //Usage in components: store.state.mediaShown
@@ -37,7 +39,12 @@ const reducer = (state, action) => {
          return { 
             ...state, weekdaysSelected: action.message 
          }
-   
+      
+      case 'newSubmission':
+         console.log('new submission in store l44')
+         return {
+            ...state, submitted: true,
+         }
 
 
 
@@ -56,11 +63,11 @@ const reducer = (state, action) => {
               ...state,
               apiData: action.message,
            }
-           case 'setWasDataReceived':
-            return {
-              ...state,
-              wasDataReceived: action.message,
-           }
+         case 'setWasDataReceived':
+         return {
+            ...state,
+            wasDataReceived: action.message,
+         }
     }
 }
 

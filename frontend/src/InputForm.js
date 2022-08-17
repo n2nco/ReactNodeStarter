@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import ReactDOM from "react-dom";
-import { Formik, Form, Field, useFormik } from "formik";
+import { Formik, Form, Field, useFormik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 import SelectionContainer from "./SelectionContainer";
 
 import { StoreContext } from "./Store";
+
+import { writeNewSubmission } from './api'
 
 const validationSchema = yup.object({
   email: yup
@@ -27,7 +29,7 @@ const CourseInput = () => {
     <div  className="App">
       {/* <Credentials> </Credentials>  */}
 
-      <h3>Enter your course details:</h3>
+      <label style={{fontWeight:'Normal', lineHeight: 3}}>Enter your course details:</label>
       <Formik
         initialValues={{ name: "", email: "" }}
         // onSubmit={async (values) => {
@@ -36,22 +38,24 @@ const CourseInput = () => {
         // }}
       >
         <Form>
-          <label htmlFor="firstName" style={{ padding: "4px" }}>
-            Institution
+          <div style={{alignItems:'flex-start'}}>
+          <label htmlFor="firstName" style={{ padding: "4px"}}>
+            Institution: &nbsp;
           </label>
           <Field name="name" type="text" placeholder="e.g UBC" />
-          <p></p>
+          <p style={{margin: '10px'}}></p>
           <label htmlFor="courseCode" style={{ padding: "4px" }}>
-            Course Code:
+            Course Code:  &nbsp;
           </label>
-          <Field name="courseCode" type="text" placeholder="eg. CPSC100" />
-          <Field as="select" name="color">
+          <Field name="courseCode" type="text" placeholder="eg. CPSC100" style={{marginRight: '10px'}} />
+          <Field as="select" name="color" style={{minHeight: '22px'}} >
             <option value="red">Fall Semester (1)</option>
             <option value="green">Winter Semester (2)</option>
             <option value="green">Full Year Course</option>
             <option value="blue">Summer Session 1</option>
             <option value="blue">Summer Session 2</option>
           </Field>
+          </div>
 
           {/* <button type="submit">Submit</button> */}
           <SelectionContainer></SelectionContainer>
@@ -62,15 +66,19 @@ const CourseInput = () => {
 };
 
 const InputForm = () => {
-  let store = useContext(StoreContext)
+  var store = useContext(StoreContext)
+  global.store = store
   const formik = useFormik({
     initialValues: {
       email: "michael.green@ubc.ca",
       password: "foobar21"
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(store?.state, null, 2));
+    onSubmit: async (values) => {
+     // alert(JSON.stringify(store?.state, null, 2));
+      console.log('JSON.stringify(store?.state, null, 2)');
+      console.log(JSON.stringify(store?.state, null, 2));
+      await writeNewSubmission()
     }
   });
 
@@ -117,5 +125,19 @@ const InputForm = () => {
     </div>
   );
 };
+
+// export var Checkbox = ({ form, name, label, disabled, id, className }: Props) => {
+//   return (
+  
+//       // You need to include onChange
+//       <>
+//       <input type="checkbox" id={name} name={name} onChange={(e) => e}/>
+//       <label htmlFor={name}> {label}</label>
+//       <ErrorMessage component="div" className="input-error" name="checkbox" />
+ 
+//     </>
+//   );
+// };
+
 
 export default InputForm;
