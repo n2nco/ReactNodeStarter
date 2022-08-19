@@ -1,3 +1,5 @@
+//NOT IN USE
+
 import * as React from 'react';
 import { useContext, useEffect, useState } from 'react'
 
@@ -14,15 +16,6 @@ const ColorToggleButton = () => {
 //   const [alignment, setAlignment] = React.useState('web');
   const [selections, setSelections] = React.useState({});
 
-
-
-//   const handleChange = (
-//     event: React.MouseEvent<HTMLElement>,
-//     newAlignment: string,
-//   ) => {
-//     alert(JSON.stringify(event))
-//     setAlignment(newAlignment);
-//   };
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
     // setView(nextView);
@@ -56,6 +49,7 @@ const ColorToggleButton = () => {
     console.log('btn1S')
     console.log(btn1S)
     console.log(e.target)
+    alert('toggledays2')
     
     e.currentTarget.selected = false
    setBtn1S(!btn1S);

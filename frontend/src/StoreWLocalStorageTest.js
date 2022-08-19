@@ -17,27 +17,21 @@ const defaultState = {
     },
 
    sessionId: '',
-   // sortBy: false,
-   // wasDataReceived: false,
-   // text: 'sample text',
-   // apiData: false,
+   sortBy: false,
+   wasDataReceived: false,
+   text: 'sample text',
+   apiData: false,
    
-   // mediaShown: 'tweets',
-   // medias: ['tweets', 'youtube', 'substack'],
+   mediaShown: 'tweets',
+   medias: ['tweets', 'youtube', 'substack'],
 
+ 
 
-   currency: "CAD",
-   amount: "", //$
-   // showStripe: false,
+   showStripe: false,
    clientSecret: "",
    paymentIntent: "",
    paymentSucceeded: false,
    submitted: false, //not in use
-
-   //when user has clicked sumbit, then edits their order, hide stripe & require clicking submit again
-   sumbitAlreadyPressed: false,
-   orderModifiedWithoutResubmit: false, 
-
 
 }
 
@@ -53,11 +47,11 @@ const reducer = (state, action) => {
          //  weekdaysSelected: action.message
          }
 
-      case 'submitAlreadyPressed':
+      case 'showStripe':
          console.log('show stripe running')
          return {
             ...state,
-            submitAlreadyPressed: action.message,
+            showStripe: action.message
          }
       
       case 'setFormValues': 
@@ -77,11 +71,9 @@ const reducer = (state, action) => {
             ...state, clientSecret: action.message
          }
       case 'setPaymentIntent': //ToDO, or include it as part of client secret obj?
-         console.log('setting payment intent + amount from payment intent' + action.message)
+         console.log('setting payment intent secret' + action.message)
          return {
-            ...state, 
-            paymentIntent: action.message,
-            amount: action.message.amount
+            ...state, paymentIntent: action.message
       }
       
       
@@ -96,41 +88,53 @@ const reducer = (state, action) => {
                ...state, submitted: true,
           }
 
-      //  case 'setSortBy':
-      //    return {
-      //      ...state,
-      //      sortBy: action.message,
-      //   }
+      case 'setMediaShown':
+         return {
+           ...state,
+           mediaShown: action.message, 
+       }
+       case 'setSortBy':
+         return {
+           ...state,
+           sortBy: action.message,
+        }
         case 'setApiData':
             return {
               ...state,
               apiData: action.message,
            }
+         case 'setWasDataReceived':
+         return {
+            ...state,
+            wasDataReceived: action.message,
+         }
          case 'saveState': //save state to local storage - call this on pay button click
             saveState(state) 
             return {
                ...state,
-         }
+            }
     }
 }
 
 
-
 const initState = (initialState) => {
-   return defaultState
+   try {
+      const localState = JSON.parse(localStorage.getItem('state')) //save iframe cart on refresh.
+      localState != null ? console.log('found localStorage state. Logging it:') : console.log('local storage state is null.')
+      console.log(localState);
+
+      //segment products available vs. products in cart
+      var state = localState !== null ? localState : defaultState;
+      return state
+
+      } catch (e) {
+         console.log(`failed to retreive state from local storage. error: ${e}`)
+         return defaultState
+   }
+
+   return state
 }
 
-let storeConfigProp = null
-const StoreProvider = ({ storeConfig, children }) => {
-   const [state, dispatch] = React.useReducer(reducer, defaultState, initState) 
-   return (
-      <StoreContext.Provider value={{ state, dispatch }}>
-         {children}
-      </StoreContext.Provider>
-   )
-}
-
-//IN USE
 const saveState = (state) => {
    try {
       const serializedState = JSON.stringify(state)
@@ -141,5 +145,14 @@ const saveState = (state) => {
    }
 }
 
+let storeConfigProp = null
+const StoreProvider = ({ storeConfig, children }) => {
+   const [state, dispatch] = React.useReducer(reducer, initState()) 
+   return (
+      <StoreContext.Provider value={{ state, dispatch }}>
+         {children}
+      </StoreContext.Provider>
+   )
+}
 export const StoreContext = createContext() 
 export default StoreProvider

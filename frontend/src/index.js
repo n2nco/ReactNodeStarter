@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import StoreProvider from './Store'
+import { BrowserRouter } from "react-router-dom";
 
 import { MetaMaskProvider } from "metamask-react";
 
@@ -12,9 +13,11 @@ import { MetaMaskProvider } from "metamask-react";
 ReactDOM.render(
   <React.StrictMode>
     <MetaMaskProvider>
+     <BrowserRouter>
       <StoreProvider>
          <App />
      </StoreProvider>
+     </BrowserRouter>
     </MetaMaskProvider>
   </React.StrictMode>,
   document.getElementById('root')

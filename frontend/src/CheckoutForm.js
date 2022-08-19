@@ -18,7 +18,12 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { StoreContext } from "./Store";
-import { saveStripeToken, writeNewOrder } from './api';
+import { writeNewOrder } from './api';
+
+
+import { useLocation } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+
 
 import './StripePayment.css'
 
@@ -31,59 +36,93 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
 
+  const store = useContext(StoreContext);
+
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [toastSuccess, setToastSuccess] = React.useState(null);
 
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-    console.log('clientSecret from url - use to simulate new url? ! ')
-    console.log(clientSecret)
+  // const pathname = window.location.pathname
+  // const [currentUrl, setCurrentUrl] = React.useState(pathname)
 
-    if (!clientSecret) {
-      return;
-    }
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent.status) {
-        case "succeeded":
-          //Can add state to database here???????????????????
-          writeNewOrder(paymentIntent);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-          console.log('paymentIntent.status - succeeded')
-          setMessage("Payment succeeded!");
-          setToastSuccess(false)
-            toast.success(`🦄  Nice job! -> ${message}  {'\n'}  - pick another course or check your email for receipt`, {
-              position: "top-right",
-              autoClose: 6000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
-      }
-    });
-  }, [stripe]);
+  // useEffect(() => {
+  //   setCurrentUrl(pathname)
+  // } , [pathname])
+
+  // useEffect(() => {
+  //   console.log('running checkoutform useffect')
+  //   if (!stripe) {
+  //     return;
+  //   }
+
+
+    // const clientSecret = new URLSearchParams(window.location.search).get(
+    //   "payment_intent_client_secret"
+    // );
+    // console.log('is there a new clientSecret from url?')
+    // console.log(clientSecret)
+
+    // if (!clientSecret) {
+    //   return;
+    // }
+
+    //*****THIS CODE DOESN"T RUN - CAN DELETE IT - URL succeeded detected from app.js + webhook stores order */
+  //   stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+  //     console.log('cs from stripe')
+  //     console.log(clientSecret)
+  //     switch (paymentIntent.status) {
+  //       case "succeeded":
+  //         //Can add state to database here???????????????????
+  //         //Aug 19th - might move success code below (write to db + toast succcess to app.js)
+  //         writeNewOrder(paymentIntent, store.state);
+  //         console.log('paymentIntent.status - succeeded')
+  //         setMessage("Payment succeeded!");
+  //         setToastSuccess(true)
+  //         toast.success(`🦄  Nice job! -> ${message}  {'\n'}  - pick another course or check your email for receipt`, {
+  //           position:  "top-center",
+  //           autoClose: 6000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+
+  //         break;
+  //       case "processing":
+  //         setMessage("Your payment is processing.");
+  //         break;
+  //       case "requires_payment_method":
+  //         setMessage("Your payment was not successful, please try again.");
+  //         break;
+  //       default:
+  //         setMessage("Something went wrong.");
+  //         break;
+  //     }
+  //   });
+  // }, [navigate, location]);
+
   const handleSubmit = async (e) => {
+
+      let tId = toast.info(`🦄  Processing payment`, {
+        type: toast.TYPE.INFO,
+        position: "top-center",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     //set store.state to localstorage here? - that way can show in modal on next page?
+
+      store.dispatch({type: 'saveState'}) //ensures state is saved to localstorage
 
     e.preventDefault();
     if (!stripe || !elements) {
@@ -91,24 +130,25 @@ const CheckoutForm = () => {
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-    setIsLoading(true);
-    const result = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/success",
-      },
-    });
-    console.log('confirm payment Reult:')
-    console.log(result)
-    let {error} = result
+      setIsLoading(true); //TODO - add toast.loading here?
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: "http://localhost:3000/success",
+        },
+      });
+      console.log('confirm payment Reult:')
+      console.log(result)
+      let {error} = result
 
 
     //show any/al errors in toast error
     if (result.error) {
+      toast.dismiss(tId);
       setToastSuccess(false)
       toast.error(`🦄 Error! -> ${JSON.stringify(result.error, 4)}`, {
-        position: "top-right",
+        position:  "top-center",
         autoClose: 4000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -117,6 +157,7 @@ const CheckoutForm = () => {
         progress: undefined,
       });
     }
+  
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
@@ -136,53 +177,46 @@ const CheckoutForm = () => {
 
 
 
-
-
-
-
-
-  var store = useContext(StoreContext)
-
-  const [productSelected] = React.useState({
-    name: "1 fall semester course",
-    price: 49.67,
-    description: "1 fall semester course",
-  });
+  // const [productSelected] = React.useState({
+  //   name: "1 fall semester course",
+  //   price: 49.67,
+  //   description: "1 fall semester course",
+  // });
   // const [toastSuccess, setToastSuccess] = React.useState(null);
 
 
-  async function handleToken(token) {
-    console.log("running handleToken - token: ")
-    console.log(token)
+  // async function handleToken(token) {
+  //   console.log("running handleToken - token: ")
+  //   console.log(token)
 
-    let stripeSuccess = await saveStripeToken(token)
+  //   let stripeSuccess = await saveStripeToken(token)
 
-    if (stripeSuccess) {
-      setToastSuccess(true)
-      toast('🦄 Wow so easy! We just sent you an email', {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  //   if (stripeSuccess) {
+  //     setToastSuccess(true)
+  //     toast('🦄 Wow so easy! We just sent you an email', {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
 
-    }
-    if (!stripeSuccess) {
-      setToastSuccess(false)
-      toast.error('🦄 Error! Try again or contact us by email', {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  //   }
+  //   if (!stripeSuccess) {
+  //     setToastSuccess(false)
+  //     toast.error('🦄 Error! Try again or contact us by email', {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
 
-    }
+  //   }
 
     // let s = store.state
     // const response = await axios.post(
@@ -196,7 +230,7 @@ const CheckoutForm = () => {
     // } else {
     //   toast("Something went wrong", { type: "error" });
     // }
-  }
+  // }
 
   return (
     <>
@@ -210,13 +244,13 @@ const CheckoutForm = () => {
 
     
         {/* <form onSubmit={handleSubmit} style={{ marginBottom: '100px'}} > */}
-        <StripeCheckout style={{ display: 'table', margin: '0 auto' }} stripeKey="pk_test_51LTvVADpGantSZj85XqAIo1e8fTMan7oYX90iettjwre22Vsy8PuuSMd8nRveBKlxMFMuwoa2avEAsgPcEivHCP400Cr9bHAND" token={handleToken} currency="CAD" bitcoin={true} amount={4900} name='1 fall semester (1) course' description='CPSC 100' label='Submit & Pay' >
-        </StripeCheckout>
+        {/* <StripeCheckout style={{ display: 'table', margin: '0 auto' }} stripeKey="pk_test_51LTvVADpGantSZj85XqAIo1e8fTMan7oYX90iettjwre22Vsy8PuuSMd8nRveBKlxMFMuwoa2avEAsgPcEivHCP400Cr9bHAND" token={handleToken} currency="CAD" bitcoin={true} amount={4900} name='1 fall semester (1) course' description='CPSC 100' label='Submit & Pay' >
+        </StripeCheckout> */}
 
       {/* aug 17th migrating from old to new stripe test: - -https://stripe.com/docs/stripe-js/react*/}
-      <form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element"></PaymentElement>
-        <button disabled={!stripe} id="submit">Submit</button> 
+      <form style={{  marginTop: '-250px', paddingTop: '10px', boxShadow: '1px 1px 10px #5469d4' }} id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement  id="payment-element"></PaymentElement>
+        <button style={{marginLeft: '60px', marginBottom: '8px', paddingTop: '0px', paddingBottom: '32px', maxHeight: '20px', marginTop: '-10px', height: '3vh'}} disabled={!stripe} id="submit">Pay - Total: ${(store?.state?.amount/100).toFixed(2)} </button> 
         {message && <div id="payment-message">{message}</div>}
         </form>
 

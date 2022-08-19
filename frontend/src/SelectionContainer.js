@@ -23,7 +23,7 @@ return (
         display="flex"
         justifyContent="center"
         // minHeight="100vh"
-        minWidth="100vw"
+        minWidth="30vw"
         spacing={-1}
         // margin="-200px 0px 0px 0px"
         
@@ -83,7 +83,7 @@ return (
         </Button>
         
        
-            {!flag ? <TimeRangePicker key={{key}} value={ (!store.state.daysAndTimes[text] || !store.state.daysAndTimes[text]?.length == 0 ) ? store.state.daysAndTimes[text] : defaultTime } onChange={ (newTime) => { if(!newTime) {console.log('clear clicked or time input falsy')}; setStoreTime(newTime); console.log('time onchange: ' + newTime); return newTime; }}  display="inline"  style={{minWidth: "500wv", display: "block", align: 'right', padding:'10px', color: 'black'}}/> : null}
+            {!flag ? <TimeRangePicker key={{key}} value={ (!store?.state?.daysAndTimes[text] || !store?.state?.daysAndTimes[text]?.length == 0 ) ? store?.state?.daysAndTimes[text] : defaultTime } onChange={ (newTime) => { if(!newTime) {console.log('clear clicked or time input falsy')}; setStoreTime(newTime); console.log('time onchange: ' + newTime); return newTime; }}  display="inline"  style={{minWidth: "500wv", display: "block", align: 'right', padding:'10px', color: 'black'}}/> : null}
 
         </Box>
       </>

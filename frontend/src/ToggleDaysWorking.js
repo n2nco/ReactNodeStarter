@@ -23,6 +23,7 @@ export default function ColorToggleButton() {
 //   };
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
+    alert('toggledaysworkign')
     // setView(nextView);
     console.log('event:')
     console.log(event)
@@ -57,7 +58,7 @@ export default function ColorToggleButton() {
     console.log('btn1S')
     console.log(btn1S)
     console.log(e.target)
-    
+
     e.currentTarget.selected = false
    setBtn1S(!btn1S);
   }
