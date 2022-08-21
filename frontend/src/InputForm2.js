@@ -11,11 +11,15 @@ import SelectionContainer from "./SelectionContainer";
 // import Grid from '@material-ui/core/Grid'
 
 import {
+  Box,
+  Typography,
+  Checkbox,
   Select,
   InputLabel,
   MenuItem,
   FormHelperText,
   FormControl,
+  FormControlLabel,
   TextField,
   Input
 } from "@material-ui/core";
@@ -85,6 +89,7 @@ const InputForm = () => {
       timezone: "PST",
       email: "anna.tory@ubc.ca",
       password: "placeholder",
+      referrer: "michael.smith@uoft.ca"
       // contactEmail: "anna.tory@gmail.com"
     },
     validationSchema: validationSchema,
@@ -136,12 +141,30 @@ const InputForm = () => {
 
   }
 
+  //for password
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  //for referrer
+  const [checked, setChecked] = React.useState(false);
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  //for contactEmail
+
+  const [emailChecked, setEmailChecked] = React.useState(false);
+  const handleEmailChecked = (event) => {
+    setEmailChecked(!emailChecked);
+  };
+  const handleMouseDownEmail = (event) => {
+    event.preventDefault();
+  };
+
 
   return (
     <div style={{paddingTop: '300px'}} onChange={onDivWrapperChange}>
@@ -285,7 +308,19 @@ const InputForm = () => {
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+            // endAdornment={
+            //   <InputAdornment position="end">
+            //     <IconButton
+            //       aria-label="toggle password visibility"
+            //       onClick={handleEmailChecked}
+            //       onMouseDown={handleMouseDownEmail}
+            //     >
+            //       {emailChecked ?  <VisibilityOff/> :  <Visibility/> }
+            //     </IconButton>
+            //   </InputAdornment>
+            // }
           />
+          
 
           {/* Old password field
            <TextField
@@ -301,7 +336,7 @@ const InputForm = () => {
             helperText={formik.touched.password && formik.errors.password}
           /> */}
              
-             <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
           <InputLabel  inputProps={{ style: { color:"rgb(55 60 65)" , fontSize: "0.9rem" }}} htmlFor="standard-adornment-password">iClicker password</InputLabel>
           <Input
           id="password"
@@ -327,6 +362,31 @@ const InputForm = () => {
             }
           />
         </FormControl>
+       {/* Reffer box + input */}
+        <FormControlLabel style={{marginTop:"-10px", marginBottom: "-43px"}} control={<Checkbox checked={checked} onChange={handleChange}   style={{marginTop:"-30px",
+            transform: "scale(0.6)",
+        }}/>} 
+        label={
+          <Box component="h6" paddingBottom={'30px'} color='grey' fontSize={11} fontWeight={'300'}>referrer? </Box>
+          }>
+        </FormControlLabel>
+  
+       {/* </FormGroup> */}
+      { checked && <TextField
+           inputProps={{ style: { color:"rgb(55 60 65)", fontSize: "0.67rem"}}}
+            fullWidth
+            id="referrer"
+            name="referrer"
+            label="referrer email - optional"
+            placeholder="christain.smith@ubc.ca"
+            value={formik.values.referrer}
+            onChange={formik.handleChange}
+            error={formik.touched.referrer && Boolean(formik.errors.referrer)}
+            helperText={formik.touched.referrer && formik.errors.referrer}
+          />
+      }
+       
+      
 
 
       
@@ -352,7 +412,7 @@ const InputForm = () => {
 
           <SelectionContainer />
 
-            <Button color="primary" variant="contained" halfWidth type="submit">
+            <Button color="primary" variant="contained" halfWidth type="submit" style={{marginBottom:"100px"}}>
               Submit & Checkout
             </Button>
             {isSubmitting && <LinearProgress />}

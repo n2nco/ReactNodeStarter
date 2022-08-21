@@ -3,6 +3,13 @@ import axios from 'axios'
 import store from './Store'
 import { toast } from "react-toastify";
 
+// const dotenv = require('dotenv')
+// dotenv.config()
+
+
+// import dotenv from 'dotenv'
+// dotenv.config()
+
 
 const qs = require('qs')
 const assert = require('assert')
@@ -50,8 +57,12 @@ export const createPaymentIntent = async (values, storeState) => {
     try {
         //combine latest form values with store.state!
         let storeStateWformValues = Object.assign(storeState, values)
+        console.log('process.env.REACT_APP_API_URL_PRODUCTION' + process.env.REACT_APP_API_URL_PRODUCTION)
 
-        let res = await axios.post('http://localhost:3010/create-payment-intent', storeStateWformValues)
+        let apiUrl
+        process.env.REACT_APP_ENV === 'development' ? apiUrl = process.env.REACT_APP_API_URL_DEVELOPMENT : apiUrl = process.env.REACT_APP_API_URL_PRODUCTION
+
+        let res = await axios.post(`${apiUrl}/create-payment-intent`, storeStateWformValues)
         // .then((res) => {console.log(res); console.log('res^');} )
         // .then((data) => {
         //   console.log('data, including clientSecret:')
@@ -63,7 +74,9 @@ export const createPaymentIntent = async (values, storeState) => {
         return res
     } catch (error) {
         console.log('error in createPaymentIntent - api.js:')
+        window.e = error
         console.log(error)
+        setTimeout( () => alert('/create-payment-intent error - server may be offline ' + JSON.stringify(window.e), 2000))
         return false
     }
 }

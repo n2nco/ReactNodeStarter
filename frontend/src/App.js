@@ -58,7 +58,7 @@ function App() {
         console.log('found existing state')
         console.log(s)
         if (s) {
-          toast.success(`🦄  Success!  I've emailed your receipt to ${s.email}. Enjoy your perfect ${s.courseCode} attendance! Use ${s.email} when checking out on any other courses & we'll send your email 20% cash back.`, {
+          toast.success(`🦄  Success!  I've emailed your receipt to ${s.email}. Enjoy your perfect ${s.courseCode} attendance! Use ${s.email} when checking out on any other courses & we'll send your email 20% of all orders placed using it.`, {
           position:  "top-center",
           autoClose: 20000,
           hideProgressBar: false,

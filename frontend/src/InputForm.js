@@ -53,7 +53,7 @@ const CourseInput = () => {
           <p style={{margin: '10px'}}></p>
           <label htmlFor="courseCode" style={{ padding: "4px" }}>
             Course Code:  &nbsp;
-         
+         </label>
           <Field as="select" name="color" style={{minHeight: '22px'}} >
             <option value="red">Fall Semester (1)</option>
             <option value="green">Winter Semester (2)</option>

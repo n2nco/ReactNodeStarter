@@ -7,6 +7,9 @@ const defaultState = {
    courseCode: "",
    // courseCodeDefault: "CPSC100",
    courseTerm: "",
+   email: "",
+   password: "",
+   
 
    daysAndTimes: { 
       monday: [],
@@ -70,6 +73,7 @@ const reducer = (state, action) => {
             timezone: action.message.timezone,
             email: action.message.email,
             password: action.message.password,
+            referrer: action.message.referrer,
          }
       case 'setClientSecret': // this is when stripe payment is shown. 
          console.log('setting client secret in reducer' + action.message)
@@ -81,7 +85,7 @@ const reducer = (state, action) => {
          return {
             ...state, 
             paymentIntent: action.message,
-            amount: action.message.amount
+            amount: action?.message?.amount
       }
       
       
