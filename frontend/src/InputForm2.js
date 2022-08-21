@@ -185,7 +185,7 @@ const InputForm = () => {
             spacing={4}
           >
           <form className={classes.container} onSubmit={formik.handleSubmit}>
-            <label style={{fontWeight:'Normal', lineHeight: 3, display: 'flex', justifyContent: 'center'}}>Enter your course details:</label>
+            <label style={{fontWeight:'Normal', lineHeight: 3, display: 'flex', justifyContent: 'center', marginTop: '170px'}}>Enter your course details:</label>
             {/* <label htmlFor="firstName" style={{ padding: "4px" }}>
           Institution: &nbsp;
         </label> */}
@@ -412,7 +412,7 @@ const InputForm = () => {
 
           <SelectionContainer />
 
-            <Button color="primary" variant="contained" halfWidth type="submit" style={{marginBottom:"100px"}}>
+            <Button color="primary" variant="contained" halfWidth type="submit" style={{marginBottom:"250px"}}>
               Submit & Checkout
             </Button>
             {isSubmitting && <LinearProgress />}

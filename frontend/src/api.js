@@ -57,11 +57,13 @@ export const createPaymentIntent = async (values, storeState) => {
     try {
         //combine latest form values with store.state!
         let storeStateWformValues = Object.assign(storeState, values)
-        console.log('process.env.REACT_APP_API_URL_PRODUCTION' + process.env.REACT_APP_API_URL_PRODUCTION)
+
 
         let apiUrl
         process.env.REACT_APP_ENV === 'development' ? apiUrl = process.env.REACT_APP_API_URL_DEVELOPMENT : apiUrl = process.env.REACT_APP_API_URL_PRODUCTION
-
+        
+        console.log('process.env.REACT_APP_API_URL_PRODUCTION' + process.env.REACT_APP_API_URL_PRODUCTION)
+        console.log('sending api req to' + apiUrl)
         let res = await axios.post(`${apiUrl}/create-payment-intent`, storeStateWformValues)
         // .then((res) => {console.log(res); console.log('res^');} )
         // .then((data) => {
@@ -76,36 +78,36 @@ export const createPaymentIntent = async (values, storeState) => {
         console.log('error in createPaymentIntent - api.js:')
         window.e = error
         console.log(error)
-        setTimeout( () => alert('/create-payment-intent error - server may be offline ' + JSON.stringify(window.e), 2000))
+        setTimeout( () => console.log('/create-payment-intent error - server may be offline - or user re-submitted ' + JSON.stringify(window.e), 2000))
         return false
     }
 }
 
 //passing in store state from react component b/c usecontext only works in component
-export const writeNewOrder = async (paymentIntent, storeState) => {
-    console.log('writing new order')
+// export const writeNewOrder = async (paymentIntent, storeState) => {
+//     console.log('writing new order')
 
-    console.log('store.state:')
-    console.log(storeState)
+//     console.log('store.state:')
+//     console.log(storeState)
 
-    const d = qs.stringify(storeState) //do i need to crate a function that returns store to get valid/loaded/updated store object?
-    console.log('qs d')
-    console.log(d)
+//     const d = qs.stringify(storeState) //do i need to crate a function that returns store to get valid/loaded/updated store object?
+//     console.log('qs d')
+//     console.log(d)
 
-    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test_production') {
-        console.log('node env is: ' + process.env.NODE_ENV ?? null)
-        let res = await axios.post(`http://localhost:3010/newOrder`, storeState, paymentIntent)
-        console.log('req sent to server')
-        console.log("received api response: " + res.data)
-        // store.dispatch({ type: 'setApiData', message: res.data})
-        // store.dispatch({ type: 'setWasDataReceived', message: true})
+//     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test_production') {
+//         console.log('node env is: ' + process.env.NODE_ENV ?? null)
+//         let res = await axios.post(`http://localhost:3010/newOrder`, storeState, paymentIntent)
+//         console.log('req sent to server')
+//         console.log("received api response: " + res.data)
+//         // store.dispatch({ type: 'setApiData', message: res.data})
+//         // store.dispatch({ type: 'setWasDataReceived', message: true})
 
-        if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test_production') { console.log('logging data received from /newOrder response:'); console.log(res.data) }
-        return true
+//         if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test_production') { console.log('logging data received from /newOrder response:'); console.log(res.data) }
+//         return true
 
-    }
+//     }
 
-}
+// }
 
 
 // export const saveStripeToken = async (token) => {

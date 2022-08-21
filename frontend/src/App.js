@@ -191,7 +191,7 @@ function App() {
 }
 
 const Text = () => {
-  return <code style={{marginBottom:'-100px', color: '#070c13', fontWeight: 300, letterSpacing: '0.025em', fontSize: '14px'}}>iClicker participation, automated</code>
+  return <label style={{marginBottom:'-100px', color: '#070c13', fontWeight: 300, letterSpacing: '0.025em', fontSize: '10px'}}>iClicker participation automated</label>
 }
 
 export default App;
